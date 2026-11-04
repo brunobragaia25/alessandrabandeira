@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" role="img" aria-label="A — Alessandra Bandeira">
+  <defs>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge>
+    </filter>
+  </defs>
+  <!-- halo de luz por trás (letreiro com backlight) -->
+  <path d="M84 12h34l74 196h-46l-14-40H68l-14 40H8L84 12Zm17 54-22 66h44l-22-66Z" fill="#F6E7C6" filter="url(#glow)" opacity=".85"/>
+  <!-- letra -->
+  <path d="M84 12h34l74 196h-46l-14-40H68l-14 40H8L84 12Zm17 54-22 66h44l-22-66Z" fill="#0B0B0D" fill-rule="evenodd"/>
+</svg>

@@ -1,26 +1,229 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===== Alessandra Bandeira — tokens ===== */
+@theme {
+  --breakpoint-dt: 860px;
+
+  --color-ink: #0b0b0d; /* preto-letreiro */
+  --color-graphite: #1b1b20;
+  --color-line-dark: #2a2a31;
+  --color-amber: #e8b04a; /* luz âmbar */
+  --color-amber-dark: #c38f2c;
+  --color-amber-light: #fbf1dc;
+  --color-halo: #f6e7c6;
+  --color-off: #f5f2ec;
+  --color-gray: #8a8780;
+  --color-text: #141416;
+  --color-body: #55524c;
+  --color-soft: #6e6a63;
+  --color-mute: #a29e96;
+  --color-pale: #cfcac0;
+  --color-line: #dcd6cb;
+  --color-line-soft: #eae5dc;
+  --color-wa: #25d366;
+
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-tenor), "Gill Sans", sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+  --font-hand: var(--font-saint), cursive;
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-off);
+  color: var(--color-text);
+}
+
+/* ===== O "A" iluminado ===== */
+.glow-a {
+  font-family: var(--font-display);
+  line-height: 1;
+  color: var(--color-ink);
+  -webkit-text-stroke: 1px rgb(246 231 198 / 0.55);
+  text-shadow: 0 0 6px rgb(246 231 198 / 0.9), 0 0 16px rgb(232 176 74 / 0.7);
+}
+/* "A" aceso do logotipo (header/footer): letra clara com luz âmbar, lida junto com "LESSANDRA" */
+.glow-a-lit {
+  font-family: var(--font-display);
+  line-height: 1;
+  color: var(--color-halo);
+  text-shadow: 0 0 10px rgb(232 176 74 / 0.75), 0 0 24px rgb(232 176 74 / 0.45);
+}
+.glow-a-dot {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  text-shadow: 0 0 6px rgb(232 176 74 / 0.95), 0 0 2px rgb(232 176 74 / 1);
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+.breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+
+/* Letreiro "acendendo": pisca e firma, como neon ligando */
+@keyframes sign-on {
+  0% { opacity: 0; filter: blur(40px); }
+  25% { opacity: 0.5; filter: blur(20px); }
+  32% { opacity: 0.15; }
+  50% { opacity: 0.8; filter: blur(8px); }
+  56% { opacity: 0.55; }
+  100% { opacity: 1; filter: blur(0); }
+}
+.sign-on {
+  animation: sign-on 2.2s ease-out 0.2s both;
+}
+
+/* Malha de quadrados do hero: linhas finas na cor do halo, apagando nas bordas */
+.hero-grid {
+  --cell: 56px;
+  background-image:
+    linear-gradient(to right, rgb(246 231 198 / 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(246 231 198 / 0.09) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 35%, transparent 100%);
+}
+@media (min-width: 860px) {
+  .hero-grid { --cell: 72px; }
+}
+.hero-glow {
+  background: radial-gradient(closest-side, rgb(232 176 74 / 0.16), rgb(232 176 74 / 0.05) 55%, transparent 100%);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spin 22s linear infinite;
+}
+
+/* ===== Animações (CSS puro) ===== */
+@keyframes word-rise {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+
+/* Headline palavra por palavra: <span class="word"><span style="--i:n">..</span></span> */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.word > span {
+  display: inline-block;
+  animation: word-rise 0.8s var(--ease-out-soft) both;
+  animation-delay: calc(150ms + var(--i, 0) * 70ms);
+}
+
+@keyframes swap-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.swap-in {
+  animation: swap-in 0.38s ease-out both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+/* Entradas ao rolar: o RevealObserver adiciona .is-in. Sem JS (.js ausente), nada fica escondido. */
+.js .reveal {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(14px);
+  transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s var(--ease-out-soft);
+}
+.js .reveal-row {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+/* O recorte vai nos filhos: com clip-path no próprio .clip o IntersectionObserver o vê como invisível. */
+.js .clip > * {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.7, 0, 0.2, 1);
+  transition-delay: inherit;
+}
+.js .reveal.is-in,
+.js .reveal-row.is-in {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+.js .clip.is-in > * {
+  clip-path: inset(0 0 0 0);
+}
+
+/* SplitText: palavra por palavra, disparado ao entrar na tela */
+.split .w {
+  display: inline-block;
+  vertical-align: top;
+}
+.split .w > span {
+  display: inline-block;
+  transition-delay: calc(var(--delay, 0ms) + var(--i, 0) * var(--stagger, 40ms));
+}
+.split-rise .w {
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.js .split-rise .w > span {
+  transform: translateY(105%) rotate(4deg);
+  transform-origin: left bottom;
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: var(--ease-out-soft);
+}
+.js .split-fade .w > span {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.45em);
+  transition-property: opacity, filter, transform;
+  transition-duration: 0.7s, 0.7s, 0.9s;
+  transition-timing-function: ease, ease, var(--ease-out-soft);
+}
+.js .split.is-in .w > span {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+@keyframes word-in {
+  from { opacity: 0; filter: blur(8px); transform: translateY(0.45em); }
+  to { opacity: 1; filter: none; transform: none; }
+}
+.split-now .w > span {
+  animation: word-in 0.6s var(--ease-out-soft) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger, 30ms));
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js .reveal, .js .reveal-row { opacity: 1; filter: none; transform: none; }
+  .js .clip > * { clip-path: none; }
+  .js .split .w > span { opacity: 1; filter: none; transform: none; }
 }
